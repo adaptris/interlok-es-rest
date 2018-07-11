@@ -12,7 +12,9 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.sniff.Sniffer;
 
 import com.adaptris.core.CoreException;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+@XStreamAlias("elasticsearch-rest-client-creator")
 public class ElasticSearchRestClientCreator implements ElasticSearchClientCreator {
   
   private static final String DEFAULT_SCHEME = "http";

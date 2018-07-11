@@ -3,20 +3,16 @@ package com.adaptris.core.elastic.rest;
 import java.io.IOException;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 
+import com.adaptris.annotation.AdvancedConfig;
 import com.adaptris.annotation.AutoPopulated;
 import com.adaptris.core.AdaptrisMessage;
 import com.adaptris.core.CoreException;
 import com.adaptris.core.ProduceDestination;
 import com.adaptris.core.ProduceException;
-import com.adaptris.core.elastic.DocumentWrapper;
-import com.adaptris.core.elastic.ElasticDocumentBuilder;
-import com.adaptris.core.elastic.ElasticSearchProducer;
-import com.adaptris.core.elastic.SimpleDocumentBuilder;
 import com.adaptris.core.util.CloseableIterable;
 import com.adaptris.core.util.ExceptionHelper;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -29,8 +25,13 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * ElasticSearch; the {@code index} is taken from the underlying {@link ElasticSearchConnection}.
  * </p>
  * 
+ * <p>
+ * Please note this implementation is compatible with Elasticsearch 6.0+
+ * </p>
+ * 
  * @author lchan
- * @config elasticsearch-index-document
+ * @author amcgrath
+ * @config elasticsearch-rest-index-document
  *
  */
 @XStreamAlias("elasticsearch-rest-index-document")
@@ -39,12 +40,18 @@ public class IndexDocuments extends ElasticSearchProducer {
   protected transient TransportClient transportClient = null;
 
   @Valid
-  @NotNull
   @AutoPopulated
   private ElasticDocumentBuilder documentBuilder;
+  
+  @Valid
+  @AutoPopulated
+  @AdvancedConfig
+  private RequestBuilder requestBuilder;
+  
 
   public IndexDocuments() {
-    setDocumentBuilder(new SimpleDocumentBuilder());
+    this.setDocumentBuilder(new SimpleDocumentBuilder());
+    this.setRequestBuilder(new ElasticSearchRequestBuilder());
   }
 
   public void produce(AdaptrisMessage msg, ProduceDestination destination) throws ProduceException {
@@ -59,12 +66,10 @@ public class IndexDocuments extends ElasticSearchProducer {
       final String index = retrieveConnection(ElasticSearchConnection.class).getIndex();
       try (CloseableIterable<DocumentWrapper> docs = ensureCloseable(documentBuilder.build(msg))) {
         docs.forEach(e -> {
-          IndexRequest request = new IndexRequest(index, type, e.uniqueId()); 
-          request.source(e.content());
-          
+          IndexRequest request = this.getRequestBuilder().buildIndexRequest(index, type, e.uniqueId(), e.content());
           IndexResponse response;
           try {
-            response = transportClient.getRestHighLevelClient().index(request);
+            response = transportClient.index(request);
           } catch (IOException e1) {
             throw new RuntimeException(e1);
           }
@@ -102,6 +107,14 @@ public class IndexDocuments extends ElasticSearchProducer {
    */
   public void setDocumentBuilder(ElasticDocumentBuilder b) {
     this.documentBuilder = b;
+  }
+
+  public RequestBuilder getRequestBuilder() {
+    return requestBuilder;
+  }
+
+  public void setRequestBuilder(RequestBuilder requestBuilder) {
+    this.requestBuilder = requestBuilder;
   }
 
 

@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.adaptris.annotation.AdvancedConfig;
 import com.adaptris.annotation.AutoPopulated;
 import com.adaptris.core.CoreException;
 import com.adaptris.core.NoOpConnection;
@@ -16,9 +17,13 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
+ * <p>
+ * Please note this implementation is compatible with Elasticsearch 6.0+
+ * </p>
  * 
  * @author lchan
- * @config elasticsearch-connection
+ * @author amcgrath
+ * @config elasticsearch-rest-connection
  */
 @XStreamAlias("elasticsearch-rest-connection")
 public class ElasticSearchConnection extends NoOpConnection {
@@ -33,6 +38,7 @@ public class ElasticSearchConnection extends NoOpConnection {
   
   @AutoPopulated
   @Valid
+  @AdvancedConfig
   private ElasticSearchClientCreator elasticSearchClientCreator;
 
   public ElasticSearchConnection() {
