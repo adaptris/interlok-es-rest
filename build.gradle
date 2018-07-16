@@ -1,6 +1,6 @@
 ext {
-  adpCoreVersion = project.hasProperty('adpCoreVersion') ? project.getProperty('adpCoreVersion') : '3.7-SNAPSHOT'
-  releaseVersion = project.hasProperty('releaseVersion') ? project.getProperty('releaseVersion') : '3.7-SNAPSHOT'
+  interlokCoreVersion = project.hasProperty('interlokCoreVersion') ? project.getProperty('interlokCoreVersion') : '3.8-SNAPSHOT'
+  releaseVersion = project.hasProperty('releaseVersion') ? project.getProperty('releaseVersion') : '3.8-SNAPSHOT'
   mavenPublishUrl = project.hasProperty('mavenPublishUrl') ? project.getProperty('mavenPublishUrl') : 'https://development.adaptris.net/nexus/content/repositories/snapshots'
   repoUsername = project.hasProperty('repoUsername') ? project.getProperty('repoUsername') : 'unknown'
   repoPassword = project.hasProperty('repoPassword') ? project.getProperty('repoPassword') : 'unknown'
@@ -33,6 +33,7 @@ def versionDir = "$buildDir/version"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
+  jcenter()
   maven { url "$defaultNexusRepo" }
   maven { url "https://development.adaptris.net/nexus/content/groups/public" }
   maven { url "https://development.adaptris.net/nexus/content/repositories/snapshots" }
@@ -65,30 +66,30 @@ configurations.all {
 }
 
 dependencies {
-  compile ("com.adaptris:adp-core:$adpCoreVersion") { changing= true}
-  compile ("com.adaptris:interlok-common:$adpCoreVersion") { changing= true}
-  compile ("com.adaptris:adp-simple-csv:$adpCoreVersion") { changing=true}
+  compile ("com.adaptris:interlok-core:$interlokCoreVersion") { changing= true}
+  compile ("com.adaptris:interlok-common:$interlokCoreVersion") { changing= true}
+  compile ("com.adaptris:interlok-csv:$interlokCoreVersion") { changing=true}
   compile ("com.jayway.jsonpath:json-path:2.2.0")
-  
+
   compile ("org.apache.commons:commons-compress:1.17")
   compile ("org.slf4j:slf4j-api:$slf4jVersion")
   compile ("org.json:json:20160810")
-  
+
   compile ("joda-time:joda-time:2.1")
-  
+
   compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.0")
   compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.3.0")
-  
-  
-  annotationProcessor ("com.adaptris:interlok-common:$adpCoreVersion") {changing= true}
+
+
+  annotationProcessor ("com.adaptris:interlok-common:$interlokCoreVersion") {changing= true}
 
   testCompile ('junit:junit:4.12')
-  testCompile ("com.adaptris:adp-stubs:$adpCoreVersion") { changing= true}
-  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.7.0")
+  testCompile ("com.adaptris:interlok-stubs:$interlokCoreVersion") { changing= true}
+  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.8.11.1")
 
   testCompile ("org.mockito:mockito-all:1.9.5")
 
-  javadoc("com.adaptris:adp-core-apt:$adpCoreVersion") { changing= true}
+  javadoc("com.adaptris:interlok-core-apt:$interlokCoreVersion") { changing= true}
 
 }
 
@@ -117,6 +118,8 @@ task generateVersion {
     versionFile.getParentFile().mkdirs()
     ant.propertyfile(file: versionFile) {
       entry(key: 'component.name', value: componentName)
+      entry(key: 'groupId', value: project.group)
+      entry(key: 'artifactId', value: project.name)
       entry(key: 'build.version', value: releaseVersion)
       entry(key: 'build.date', value: new Date().format('yyyy-MM-dd'))
     }
@@ -136,7 +139,7 @@ javadoc {
 }
 
 jacoco {
-  toolVersion="0.8.0"
+  toolVersion="0.8.1"
 }
 
 jacocoTestReport {
@@ -172,9 +175,11 @@ publishing {
       artifact examplesJar { classifier "examples" }
 
       pom.withXml {
-        asNode().appendNode("description", "Perform logical expression evaluations within Interlok configuration")
+        asNode().appendNode("description", "Inserting data into Elasticsearch using their REST api.")
         def properties = asNode().appendNode("properties")
-        properties.appendNode("target", "3.6.6+")
+        properties.appendNode("target", "3.3.0+")
+        properties.appendNode("tags", "csv,elasticsearch,elastic")
+        properties.appendNode("license", "false")
       }
     }
   }
