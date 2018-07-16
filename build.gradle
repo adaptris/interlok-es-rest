@@ -177,7 +177,7 @@ publishing {
       pom.withXml {
         asNode().appendNode("description", "Inserting data into Elasticsearch using their REST api.")
         def properties = asNode().appendNode("properties")
-        properties.appendNode("target", "3.3.0+")
+        properties.appendNode("target", "3.8.0+")
         properties.appendNode("tags", "csv,elasticsearch,elastic")
         properties.appendNode("license", "false")
       }
