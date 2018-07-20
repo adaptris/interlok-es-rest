@@ -85,7 +85,7 @@ dependencies {
 
   testCompile ('junit:junit:4.12')
   testCompile ("com.adaptris:interlok-stubs:$interlokCoreVersion") { changing= true}
-  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.9.5")
+  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.9.6")
 
   testCompile ("org.mockito:mockito-all:1.9.5")
 
