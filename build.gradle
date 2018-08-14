@@ -75,9 +75,9 @@ dependencies {
   compile ("org.slf4j:slf4j-api:$slf4jVersion")
   compile ("org.json:json:20180130")
 
-  compile ("joda-time:joda-time:2.1")
+  compile ("joda-time:joda-time:2.10")
 
-  compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.0")
+  compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.2")
   compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.3.2")
 
 
@@ -175,6 +175,7 @@ publishing {
       artifact examplesJar { classifier "examples" }
 
       pom.withXml {
+        asNode().appendNode("name", componentName)
         asNode().appendNode("description", "Inserting data into Elasticsearch using their REST api.")
         def properties = asNode().appendNode("properties")
         properties.appendNode("target", "3.8.0+")
