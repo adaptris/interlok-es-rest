@@ -57,7 +57,7 @@ public class CsvGeopointBuilderTest extends CsvBuilderCase {
     CSVWithGeoPointBuilder documentBuilder = new CSVWithGeoPointBuilder();
     documentBuilder.setAddTimestampField("My_Timestamp");
     int count = 0;
-    try (CloseableIterable<DocumentWrapper> docs = ElasticSearchProducer.ensureCloseable(documentBuilder.build(msg))) {
+    try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(documentBuilder.build(msg))) {
       for (DocumentWrapper doc : docs) {
         count++;
         ReadContext context = parse(Strings.toString(doc.content()));
@@ -78,7 +78,7 @@ public class CsvGeopointBuilderTest extends CsvBuilderCase {
     AdaptrisMessage msg = AdaptrisMessageFactory.getDefaultInstance().newMessage(CSV_WITH_LATLONG);
     CSVWithGeoPointBuilder documentBuilder = new CSVWithGeoPointBuilder();
     int count = 0;
-    try (CloseableIterable<DocumentWrapper> docs = ElasticSearchProducer.ensureCloseable(documentBuilder.build(msg))) {
+    try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(documentBuilder.build(msg))) {
       for (DocumentWrapper doc : docs) {
         count++;
         ReadContext context = parse(Strings.toString(doc.content()));
@@ -99,7 +99,7 @@ public class CsvGeopointBuilderTest extends CsvBuilderCase {
     CSVWithGeoPointBuilder documentBuilder = new CSVWithGeoPointBuilder();
     documentBuilder.setFieldNameMapper(new ToUpperCaseFieldNameMapper());
     int count = 0;
-    try (CloseableIterable<DocumentWrapper> docs = ElasticSearchProducer.ensureCloseable(documentBuilder.build(msg))) {
+    try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(documentBuilder.build(msg))) {
       for (DocumentWrapper doc : docs) {
         count++;
         ReadContext context = parse(Strings.toString(doc.content()));
@@ -123,7 +123,7 @@ public class CsvGeopointBuilderTest extends CsvBuilderCase {
     documentBuilder.setLongitudeFieldNames("My_Lon");
     documentBuilder.setLocationFieldName("My_Location");
     int count = 0;
-    try (CloseableIterable<DocumentWrapper> docs = ElasticSearchProducer.ensureCloseable(documentBuilder.build(msg))) {
+    try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(documentBuilder.build(msg))) {
       for (DocumentWrapper doc : docs) {
         count++;
         ReadContext context = parse(Strings.toString(doc.content()));
@@ -143,7 +143,7 @@ public class CsvGeopointBuilderTest extends CsvBuilderCase {
     AdaptrisMessage msg = AdaptrisMessageFactory.getDefaultInstance().newMessage(CSV_WITH_LATLONG_AND_DELTA);
     CSVWithGeoPointBuilder documentBuilder = new CSVWithGeoPointBuilder();
     int count = 0;
-    try (CloseableIterable<DocumentWrapper> docs = ElasticSearchProducer.ensureCloseable(documentBuilder.build(msg))) {
+    try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(documentBuilder.build(msg))) {
       for (DocumentWrapper doc : docs) {
         count++;
         ReadContext context = parse(Strings.toString(doc.content()));
@@ -163,7 +163,7 @@ public class CsvGeopointBuilderTest extends CsvBuilderCase {
     AdaptrisMessage msg = AdaptrisMessageFactory.getDefaultInstance().newMessage(CSV_WITHOUT_LATLONG);
     CSVWithGeoPointBuilder documentBuilder = new CSVWithGeoPointBuilder();
     int count = 0;
-    try (CloseableIterable<DocumentWrapper> docs = ElasticSearchProducer.ensureCloseable(documentBuilder.build(msg))) {
+    try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(documentBuilder.build(msg))) {
       for (DocumentWrapper doc : docs) {
         count++;
         ReadContext context = parse(Strings.toString(doc.content()));

@@ -61,7 +61,7 @@ public class BulkIndexDocuments extends IndexDocuments {
       
       BulkRequest bulkRequest = this.getRequestBuilder().buildBulkRequest();
       
-      try (CloseableIterable<DocumentWrapper> docs = ensureCloseable(getDocumentBuilder().build(msg))) {
+      try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(getDocumentBuilder().build(msg))) {
         int count = 0;
         for (DocumentWrapper doc : docs) {
           count++;

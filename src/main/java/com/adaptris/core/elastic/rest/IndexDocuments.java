@@ -64,7 +64,7 @@ public class IndexDocuments extends ElasticSearchProducer {
     try {
       final String type = destination.getDestination(msg);
       final String index = retrieveConnection(ElasticSearchConnection.class).getIndex();
-      try (CloseableIterable<DocumentWrapper> docs = ensureCloseable(documentBuilder.build(msg))) {
+      try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(documentBuilder.build(msg))) {
         docs.forEach(e -> {
           IndexRequest request = this.getRequestBuilder().buildIndexRequest(index, type, e.uniqueId(), e.content());
           IndexResponse response;
