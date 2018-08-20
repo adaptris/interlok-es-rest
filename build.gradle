@@ -71,7 +71,6 @@ dependencies {
   compile ("com.adaptris:interlok-csv:$interlokCoreVersion") { changing=true}
   compile ("com.jayway.jsonpath:json-path:2.4.0")
 
-  compile ("org.apache.commons:commons-compress:1.17")
   compile ("org.slf4j:slf4j-api:$slf4jVersion")
   compile ("org.json:json:20180130")
 
