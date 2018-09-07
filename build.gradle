@@ -76,8 +76,8 @@ dependencies {
 
   compile ("joda-time:joda-time:2.10")
 
-  compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.2")
-  compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.3.2")
+  compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.4.0")
+  compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.4.0")
 
 
   annotationProcessor ("com.adaptris:interlok-common:$interlokCoreVersion") {changing= true}
