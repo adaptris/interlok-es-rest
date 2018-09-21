@@ -11,6 +11,7 @@ ext {
   organizationName = "Adaptris Ltd"
   organizationUrl = "http://interlok.adaptris.net"
   slf4jVersion = '1.7.25'
+  elasticVersion = '6.4.1'
 }
 
 if (JavaVersion.current().isJava8Compatible()) {
@@ -76,15 +77,15 @@ dependencies {
 
   compile ("joda-time:joda-time:2.10")
 
-  compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.4.0")
-  compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.4.0")
+  compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticVersion")
+  compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:$elasticVersion")
 
 
   annotationProcessor ("com.adaptris:interlok-common:$interlokCoreVersion") {changing= true}
 
   testCompile ('junit:junit:4.12')
   testCompile ("com.adaptris:interlok-stubs:$interlokCoreVersion") { changing= true}
-  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.9.6")
+  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.9.7")
 
   testCompile ("org.mockito:mockito-all:1.10.19")
 
