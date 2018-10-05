@@ -16,6 +16,7 @@ import com.jayway.jsonpath.ReadContext;
 public class SimpleJsonDocumentBuilderTest extends BuilderCase {
 
 
+  @SuppressWarnings("deprecation")
   @Test
   public void testBuild() throws Exception {
     AdaptrisMessage msg = AdaptrisMessageFactory.getDefaultInstance().newMessage("Hello World");

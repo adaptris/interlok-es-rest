@@ -23,10 +23,10 @@ import com.adaptris.annotation.AutoPopulated;
 import com.adaptris.annotation.InputFieldDefault;
 import com.adaptris.core.AdaptrisMessage;
 import com.adaptris.core.ProduceException;
-import com.adaptris.core.util.CloseableIterable;
 import com.adaptris.core.transform.csv.BasicFormatBuilder;
 import com.adaptris.core.transform.csv.FormatBuilder;
 import com.adaptris.core.util.Args;
+import com.adaptris.core.util.CloseableIterable;
 import com.adaptris.core.util.ExceptionHelper;
 
 public abstract class CSVDocumentBuilderImpl implements ElasticDocumentBuilder {
@@ -135,6 +135,7 @@ public abstract class CSVDocumentBuilderImpl implements ElasticDocumentBuilder {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void close() throws IOException {
       IOUtils.closeQuietly(parser);
     }

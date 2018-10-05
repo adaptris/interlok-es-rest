@@ -11,6 +11,7 @@ ext {
   organizationName = "Adaptris Ltd"
   organizationUrl = "http://interlok.adaptris.net"
   slf4jVersion = '1.7.25'
+  elasticVersion = '6.4.1'
 }
 
 if (JavaVersion.current().isJava8Compatible()) {
@@ -71,21 +72,20 @@ dependencies {
   compile ("com.adaptris:interlok-csv:$interlokCoreVersion") { changing=true}
   compile ("com.jayway.jsonpath:json-path:2.4.0")
 
-  compile ("org.apache.commons:commons-compress:1.17")
   compile ("org.slf4j:slf4j-api:$slf4jVersion")
-  compile ("org.json:json:20180130")
+  compile ("org.json:json:20180813")
 
   compile ("joda-time:joda-time:2.10")
 
-  compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.2")
-  compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.3.2")
+  compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticVersion")
+  compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:$elasticVersion")
 
 
   annotationProcessor ("com.adaptris:interlok-common:$interlokCoreVersion") {changing= true}
 
   testCompile ('junit:junit:4.12')
   testCompile ("com.adaptris:interlok-stubs:$interlokCoreVersion") { changing= true}
-  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.9.6")
+  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.9.7")
 
   testCompile ("org.mockito:mockito-all:1.10.19")
 

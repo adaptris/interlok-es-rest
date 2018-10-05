@@ -30,7 +30,7 @@ public abstract class CsvBuilderCase extends BuilderCase {
     msg.addMetadata(testName.getMethodName(), testName.getMethodName());
     CSVDocumentBuilderImpl documentBuilder = createBuilder();
     int count = 0;
-    try (CloseableIterable<DocumentWrapper> docs = ElasticSearchProducer.ensureCloseable(documentBuilder.build(msg))) {
+    try (CloseableIterable<DocumentWrapper> docs = CloseableIterable.ensureCloseable(documentBuilder.build(msg))) {
       for (DocumentWrapper doc : docs) {
         count++;
         ReadContext context = parse(Strings.toString(doc.content()));
