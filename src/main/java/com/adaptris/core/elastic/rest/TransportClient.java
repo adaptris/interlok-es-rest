@@ -1,5 +1,6 @@
 package com.adaptris.core.elastic.rest;
 
+import java.io.Closeable;
 import java.io.IOException;
 
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -9,26 +10,11 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.sniff.Sniffer;
 
-import com.adaptris.core.ComponentLifecycle;
-import com.adaptris.core.CoreException;
-
-public class TransportClient implements ComponentLifecycle {
+public class TransportClient implements Closeable {
 
   private RestHighLevelClient restHighLevelClient;
-  
+
   private Sniffer sniffer;
-
-  @Override
-  public void init() throws CoreException {
-  }
-
-  @Override
-  public void start() throws CoreException {
-  }
-
-  @Override
-  public void stop() {
-  }
 
   @Override
   public void close() {
@@ -37,7 +23,7 @@ public class TransportClient implements ComponentLifecycle {
         this.getSniffer().close();
     }
     catch (Exception e) { ; }
-    
+
     try {
       if (this.getRestHighLevelClient() != null)
         this.getRestHighLevelClient().close();
@@ -68,5 +54,5 @@ public class TransportClient implements ComponentLifecycle {
   public BulkResponse bulk(BulkRequest bulkRequest) throws IOException {
     return this.getRestHighLevelClient().bulk(bulkRequest);
   }
-  
+
 }
