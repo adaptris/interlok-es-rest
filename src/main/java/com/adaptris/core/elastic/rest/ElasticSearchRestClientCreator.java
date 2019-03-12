@@ -16,27 +16,24 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("elasticsearch-rest-client-creator")
 public class ElasticSearchRestClientCreator implements ElasticSearchClientCreator {
-  
+
   private static final String DEFAULT_SCHEME = "http";
 
   @Override
   public TransportClient createTransportClient(List<String> transportUrls) throws CoreException {
     TransportClient tClient = new TransportClient();
-    
+
     List<HttpHost> hosts = new ArrayList<>();
     for(String transportUrl : transportUrls) {
       hosts.add(new HttpHost(this.getHost(transportUrl), this.getPort(transportUrl), this.getScheme(transportUrl)));
     }
-    
+
     RestClientBuilder restClientBuilder = RestClient.builder(hosts.toArray(new HttpHost[0]));
     RestHighLevelClient client = new RestHighLevelClient(restClientBuilder);
-    
+
     Sniffer sniffer = Sniffer.builder(client.getLowLevelClient()).build();
-    
-    tClient.setRestHighLevelClient(client);
-    tClient.setSniffer(sniffer);
-    
-    return tClient;
+
+    return new TransportClient().withRestHighLevelClient(client).withSniffer(sniffer);
   }
 
   private String getHost(String hostUrl) {
@@ -62,12 +59,12 @@ public class ElasticSearchRestClientCreator implements ElasticSearchClientCreato
     }
     return result;
   }
-  
+
   private String getScheme(String hostUrl) {
     String result = DEFAULT_SCHEME;
     if (hostUrl.contains("://"))
       result = hostUrl.substring(0, hostUrl.indexOf("://"));
-    
+
     return result;
   }
 }

@@ -14,9 +14,9 @@ import org.elasticsearch.client.sniff.Sniffer;
 
 public class TransportClient implements Closeable {
 
-  private RestHighLevelClient restHighLevelClient;
+  private transient RestHighLevelClient restHighLevelClient;
 
-  private Sniffer sniffer;
+  private transient Sniffer sniffer;
 
   @Override
   @SuppressWarnings("deprecation")
@@ -29,16 +29,26 @@ public class TransportClient implements Closeable {
     return restHighLevelClient;
   }
 
-  public void setRestHighLevelClient(RestHighLevelClient restHighLevelClient) {
+  private void setRestHighLevelClient(RestHighLevelClient restHighLevelClient) {
     this.restHighLevelClient = restHighLevelClient;
+  }
+
+  public TransportClient withRestHighLevelClient(RestHighLevelClient c) {
+    setRestHighLevelClient(c);
+    return this;
   }
 
   public Sniffer getSniffer() {
     return sniffer;
   }
 
-  public void setSniffer(Sniffer sniffer) {
+  private void setSniffer(Sniffer sniffer) {
     this.sniffer = sniffer;
+  }
+
+  public TransportClient withSniffer(Sniffer c) {
+    setSniffer(c);
+    return this;
   }
 
   public IndexResponse index(IndexRequest request) throws IOException {
