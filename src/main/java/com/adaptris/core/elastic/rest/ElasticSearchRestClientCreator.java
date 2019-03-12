@@ -17,6 +17,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("elasticsearch-rest-client-creator")
 public class ElasticSearchRestClientCreator implements ElasticSearchClientCreator {
 
+  private static final String URI_AUTH_SEPARATOR = "://";
   private static final String DEFAULT_SCHEME = "http";
 
   @Override
@@ -37,7 +38,7 @@ public class ElasticSearchRestClientCreator implements ElasticSearchClientCreato
 
   private String getHost(String hostUrl) {
     String result = hostUrl;
-    if (hostUrl.contains("://")) {
+    if (hostUrl.contains(URI_AUTH_SEPARATOR)) {
       result = new URLName(hostUrl).getHost();
     }
     else {
@@ -48,7 +49,7 @@ public class ElasticSearchRestClientCreator implements ElasticSearchClientCreato
 
   private Integer getPort(String hostUrl) {
     Integer result = 0;
-    if (hostUrl.contains("://")) {
+    if (hostUrl.contains(URI_AUTH_SEPARATOR)) {
       result = new URLName(hostUrl).getPort();
     }
     else {
@@ -60,8 +61,8 @@ public class ElasticSearchRestClientCreator implements ElasticSearchClientCreato
 
   private String getScheme(String hostUrl) {
     String result = DEFAULT_SCHEME;
-    if (hostUrl.contains("://"))
-      result = hostUrl.substring(0, hostUrl.indexOf("://"));
+    if (hostUrl.contains(URI_AUTH_SEPARATOR))
+      result = hostUrl.substring(0, hostUrl.indexOf(URI_AUTH_SEPARATOR));
 
     return result;
   }
