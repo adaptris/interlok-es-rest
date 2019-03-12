@@ -3,10 +3,12 @@ package com.adaptris.core.elastic.rest;
 import java.io.Closeable;
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.sniff.Sniffer;
 
@@ -17,18 +19,10 @@ public class TransportClient implements Closeable {
   private Sniffer sniffer;
 
   @Override
+  @SuppressWarnings("deprecation")
   public void close() {
-    try {
-      if (this.getSniffer() != null)
-        this.getSniffer().close();
-    }
-    catch (Exception e) { ; }
-
-    try {
-      if (this.getRestHighLevelClient() != null)
-        this.getRestHighLevelClient().close();
-    }
-    catch (Exception e) { ; }
+    IOUtils.closeQuietly(getSniffer());
+    IOUtils.closeQuietly(getRestHighLevelClient());
   }
 
   public RestHighLevelClient getRestHighLevelClient() {
@@ -48,11 +42,11 @@ public class TransportClient implements Closeable {
   }
 
   public IndexResponse index(IndexRequest request) throws IOException {
-    return this.getRestHighLevelClient().index(request);
+    return this.getRestHighLevelClient().index(request, RequestOptions.DEFAULT);
   }
 
   public BulkResponse bulk(BulkRequest bulkRequest) throws IOException {
-    return this.getRestHighLevelClient().bulk(bulkRequest);
+    return this.getRestHighLevelClient().bulk(bulkRequest, RequestOptions.DEFAULT);
   }
 
 }
