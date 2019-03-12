@@ -21,7 +21,6 @@ public class ElasticSearchRestClientCreator implements ElasticSearchClientCreato
 
   @Override
   public TransportClient createTransportClient(List<String> transportUrls) throws CoreException {
-    TransportClient tClient = new TransportClient();
 
     List<HttpHost> hosts = new ArrayList<>();
     for(String transportUrl : transportUrls) {
@@ -53,8 +52,7 @@ public class ElasticSearchRestClientCreator implements ElasticSearchClientCreato
       result = new URLName(hostUrl).getPort();
     }
     else {
-      String s = hostUrl.substring(hostUrl.lastIndexOf(":") + 1);
-      s.replaceAll("/", "");
+      String s = hostUrl.substring(hostUrl.lastIndexOf(":") + 1).replaceAll("/", "");
       result = Integer.parseInt(s);
     }
     return result;
