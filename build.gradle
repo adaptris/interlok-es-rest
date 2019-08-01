@@ -195,6 +195,7 @@ publishing {
         properties.appendNode("target", "3.8.0+")
         properties.appendNode("tags", "csv,elasticsearch,elastic")
         properties.appendNode("license", "false")
+        properties.appendNode("deprecated", "Consider migrating to interlok-elastic-rest; this does not have feature parity with interlok-es5")
       }
     }
   }
