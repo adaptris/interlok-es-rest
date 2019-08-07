@@ -73,7 +73,7 @@ dependencies {
   compile ("com.jayway.jsonpath:json-path:2.4.0")
 
   compile ("org.slf4j:slf4j-api:$slf4jVersion")
-  compile ("org.json:json:20180813")
+  compile ("org.json:json:20190722")
 
   compile ("joda-time:joda-time:2.10.3")
 
