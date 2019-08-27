@@ -21,9 +21,9 @@ ext {
   componentName='Interlok Elastic Search REST'
   organizationName = "Adaptris Ltd"
   organizationUrl = "http://interlok.adaptris.net"
-  slf4jVersion = '1.7.26'
+  slf4jVersion = '1.7.27'
   elasticVersion = '6.4.3'
-  log4j2Version = '2.11.2'
+  log4j2Version = '2.12.1'
 }
 
 if (JavaVersion.current().isJava8Compatible()) {
@@ -73,9 +73,9 @@ dependencies {
   compile ("com.jayway.jsonpath:json-path:2.4.0")
 
   compile ("org.slf4j:slf4j-api:$slf4jVersion")
-  compile ("org.json:json:20180813")
+  compile ("org.json:json:20190722")
 
-  compile ("joda-time:joda-time:2.10.2")
+  compile ("joda-time:joda-time:2.10.3")
 
   compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticVersion")
   compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:$elasticVersion")
@@ -85,7 +85,7 @@ dependencies {
 
   testCompile ('junit:junit:4.12')
   testCompile ("com.adaptris:interlok-stubs:$interlokCoreVersion") { changing= true}
-  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.9.9")
+  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.9.9.1")
   testCompile ("org.apache.logging.log4j:log4j-core:$log4j2Version")
   testCompile ("org.apache.logging.log4j:log4j-1.2-api:$log4j2Version")
   testCompile ("org.apache.logging.log4j:log4j-api:$log4j2Version")
@@ -195,6 +195,7 @@ publishing {
         properties.appendNode("target", "3.8.0+")
         properties.appendNode("tags", "csv,elasticsearch,elastic")
         properties.appendNode("license", "false")
+        properties.appendNode("deprecated", "Consider migrating to interlok-elastic-rest; this does not have feature parity with interlok-es5")
       }
     }
   }
