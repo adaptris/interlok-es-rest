@@ -75,7 +75,7 @@ dependencies {
   compile ("org.slf4j:slf4j-api:$slf4jVersion")
   compile ("org.json:json:20190722")
 
-  compile ("joda-time:joda-time:2.10.3")
+  compile ("joda-time:joda-time:2.10.4")
 
   compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticVersion")
   compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:$elasticVersion")
