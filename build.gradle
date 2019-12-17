@@ -21,7 +21,7 @@ ext {
   componentName='Interlok Elastic Search REST'
   organizationName = "Adaptris Ltd"
   organizationUrl = "http://interlok.adaptris.net"
-  slf4jVersion = '1.7.29'
+  slf4jVersion = '1.7.30'
   elasticVersion = '6.4.3'
   log4j2Version = '2.12.1'
 }
