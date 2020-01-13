@@ -1,20 +1,21 @@
 package com.adaptris.core.elastic.rest;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.common.unit.TimeValue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import com.adaptris.core.AdaptrisMessage;
 import com.adaptris.core.ComponentLifecycle;
 import com.adaptris.core.ConfiguredProduceDestination;
@@ -54,13 +55,14 @@ public class BulkIndexDocumentsTest extends ProducerCase {
   
   @Mock private ActionExtractor mockActionExtractor;
   
-  public BulkIndexDocumentsTest(String name) {
-    super(name);
+  public BulkIndexDocumentsTest() {
+    super();
   }
 
   // **********************************************************
   // ******* Setup
   //**********************************************************
+  @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     
@@ -110,6 +112,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
     startComponent(indexDocuments);
   }
   
+  @After
   public void tearDown() throws Exception {
     stopComponent(elasticSearchConnection);
     stopComponent(indexDocuments);
@@ -118,7 +121,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
   //**********************************************************
   // ******* Tests
   //**********************************************************
-  
+  @Test
   public void testSimpleDocumentIndexed() throws Exception {
     when(mockBulkRequest.numberOfActions())
         .thenReturn(1);
@@ -128,6 +131,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
     verify(mockTransportClient).bulk(any());
   }
   
+  @Test
   public void testMultipleSimpleDocumentIndexed() throws Exception {
     when(mockBulkRequest.numberOfActions())
         .thenReturn(3);
@@ -141,6 +145,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
     verify(mockTransportClient).bulk(any());
   }
   
+  @Test
   public void testMultipleSimpleDocumentIndexedWithFailures() throws Exception {
     when(mockBulkRequest.numberOfActions())
         .thenReturn(3);
@@ -159,6 +164,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
     }
   }
   
+  @Test
   public void testMultipleSimpleDocumentIndexedMultiBatch() throws Exception {
     when(mockBulkRequest.numberOfActions())
         .thenReturn(1)
@@ -176,6 +182,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
     verify(mockTransportClient, times(3)).bulk(any());
   }
   
+  @Test
   public void testMultipleSimpleDocumentDifferentActions() throws Exception {
     when(mockActionExtractor.extract(any(), any()))
         .thenReturn("INDEX")
@@ -197,6 +204,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
     verify(mockTransportClient).bulk(any());
   }
   
+  @Test
   public void testIncorrectAction() throws Exception {
     when(mockActionExtractor.extract(any(), any()))
         .thenReturn("DOES_NOT_EXIST");
@@ -216,6 +224,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
     }
   }
   
+  @Test
   public void testNoSimpleDocumentIndexed() throws Exception {
     when(mockBulkRequest.numberOfActions())
         .thenReturn(0);
@@ -228,6 +237,7 @@ public class BulkIndexDocumentsTest extends ProducerCase {
     verify(mockTransportClient, times(0)).bulk(any());
   }
 
+  @Test
   public void testProduceExceptionOnIndexIOException() throws Exception {
     when(mockBulkRequest.numberOfActions())
         .thenReturn(1);
@@ -277,6 +287,11 @@ public class BulkIndexDocumentsTest extends ProducerCase {
   @Override
   protected String getExampleCommentHeader(Object o) {
     return super.getExampleCommentHeader(o) + EXAMPLE_COMMENT_HEADER;
+  }
+
+  @Override
+  public boolean isAnnotatedForJunit4() {
+    return true;
   }
   
 }

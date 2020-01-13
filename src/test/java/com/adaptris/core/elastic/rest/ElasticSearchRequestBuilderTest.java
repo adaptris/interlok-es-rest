@@ -3,10 +3,10 @@ package com.adaptris.core.elastic.rest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
-
+import org.junit.Before;
+import org.junit.Test;
 import com.adaptris.core.AdaptrisMessage;
 import com.adaptris.core.DefaultMessageFactory;
-
 import junit.framework.TestCase;
 
 public class ElasticSearchRequestBuilderTest extends TestCase {
@@ -19,6 +19,7 @@ public class ElasticSearchRequestBuilderTest extends TestCase {
   
   private DocumentWrapper documentWrapper;
   
+  @Before
   public void setUp() throws Exception {
     builder = new ElasticSearchRequestBuilder();
     
@@ -31,6 +32,7 @@ public class ElasticSearchRequestBuilderTest extends TestCase {
     documentWrapper = iterableDocs.iterator().next();
   }
   
+  @Test
   public void testBuildIndexRequest() throws Exception {    
     IndexRequest indexRequest = builder.buildIndexRequest("myIndex", "myType", "myId", documentWrapper.content());
     
@@ -39,6 +41,7 @@ public class ElasticSearchRequestBuilderTest extends TestCase {
     assertEquals("myType", indexRequest.type());
   }
   
+  @Test
   public void testBuildUpdateRequest() throws Exception {    
     UpdateRequest updateRequest = builder.buildUpdateRequest("myIndex", "myType", "myId", documentWrapper.content());
     
@@ -47,6 +50,7 @@ public class ElasticSearchRequestBuilderTest extends TestCase {
     assertEquals("myType", updateRequest.type());
   }
   
+  @Test
   public void testBuildDeleteRequest() throws Exception {    
     DeleteRequest deleteRequest = builder.buildDeleteRequest("myIndex", "myType", "myId");
     
