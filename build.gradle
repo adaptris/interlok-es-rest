@@ -99,6 +99,7 @@ dependencies {
   compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticVersion")
   compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:$elasticVersion")
 
+  compile ("commons-collections:commons-collections:3.2.2")
 
   annotationProcessor ("com.adaptris:interlok-core-apt:$interlokCoreVersion") {changing= true}
 
