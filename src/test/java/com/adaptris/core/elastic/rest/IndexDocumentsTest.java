@@ -1,18 +1,19 @@
 package com.adaptris.core.elastic.rest;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 import org.elasticsearch.action.index.IndexResponse;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import com.adaptris.core.AdaptrisMessage;
 import com.adaptris.core.ComponentLifecycle;
 import com.adaptris.core.ConfiguredProduceDestination;
@@ -46,13 +47,14 @@ public class IndexDocumentsTest extends ProducerCase {
   
   @Mock private IndexResponse mockIndexResponse;
   
-  public IndexDocumentsTest(String name) {
-    super(name);
+  public IndexDocumentsTest() {
+    super();
   }
 
   // **********************************************************
   // ******* Setup
   //**********************************************************
+  @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     
@@ -93,6 +95,7 @@ public class IndexDocumentsTest extends ProducerCase {
     startComponent(indexDocuments);
   }
   
+  @After
   public void tearDown() throws Exception {
     stopComponent(elasticSearchConnection);
     stopComponent(indexDocuments);
@@ -101,13 +104,14 @@ public class IndexDocumentsTest extends ProducerCase {
   //**********************************************************
   // ******* Tests
   //**********************************************************
-  
+  @Test
   public void testSimpleDocumentIndexed() throws Exception {
     indexDocuments.produce(adaptrisMessage, produceDestination);
     
     verify(mockTransportClient).index(any());
   }
   
+  @Test
   public void testMultipleSimpleDocumentIndexed() throws Exception {
     when(mockElasticDocumentBuilder.build(adaptrisMessage))
         .thenReturn(Arrays.asList(new DocumentWrapper[] {mockDocumentWrapper, mockDocumentWrapper, mockDocumentWrapper}));
@@ -117,6 +121,7 @@ public class IndexDocumentsTest extends ProducerCase {
     verify(mockTransportClient, times(3)).index(any());
   }
   
+  @Test
   public void testNoSimpleDocumentIndexed() throws Exception {
     when(mockElasticDocumentBuilder.build(adaptrisMessage))
         .thenReturn(Arrays.asList(new DocumentWrapper[] {}));
@@ -126,6 +131,7 @@ public class IndexDocumentsTest extends ProducerCase {
     verify(mockTransportClient, times(0)).index(any());
   }
 
+  @Test
   public void testProduceExceptionOnIndexIOException() throws Exception {
     when(mockTransportClient.index(any()))
         .thenThrow(new IOException("expected"));
@@ -172,6 +178,11 @@ public class IndexDocumentsTest extends ProducerCase {
   @Override
   protected String getExampleCommentHeader(Object o) {
     return super.getExampleCommentHeader(o) + EXAMPLE_COMMENT_HEADER;
+  }
+
+  @Override
+  public boolean isAnnotatedForJunit4() {
+    return true;
   }
   
 }
