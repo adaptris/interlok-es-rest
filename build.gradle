@@ -3,7 +3,7 @@ plugins {
   id 'maven'
   id 'maven-publish'
   id  "jacoco"
-  id 'com.github.spotbugs' version '3.0.0'
+  id 'com.github.spotbugs' version '4.0.5'
 }
 ext {
   interlokCoreVersion = project.hasProperty('interlokCoreVersion') ? project.getProperty('interlokCoreVersion') : '3.10-SNAPSHOT'
@@ -23,7 +23,7 @@ ext {
   organizationUrl = "http://interlok.adaptris.net"
   slf4jVersion = '1.7.30'
   elasticVersion = '6.4.3'
-  log4j2Version = '2.13.0'
+  log4j2Version = '2.13.2'
 }
 
 if (JavaVersion.current().isJava8Compatible()) {
@@ -79,6 +79,11 @@ configurations {
   all*.exclude group: 'net.sf.saxon', module: 'saxon'
   all*.exclude group: 'org.codehaus.woodstox'
   all*.exclude group: 'org.eclipse.jetty.orbit', module: 'javax.mail.glassfish'
+  // INTERLOK-3197 exclude old javax.mail
+  all*.exclude group: 'com.sun.mail', module: 'javax.mail'
+  all*.exclude group: 'javax.validation', module: 'validation-api'
+  all*.exclude group: 'javax.activation', module: 'activation'
+  all*.exclude group: 'javax.activation', module: 'javax.activation-api'
 }
 
 configurations.all {
@@ -94,7 +99,7 @@ dependencies {
   compile ("org.slf4j:slf4j-api:$slf4jVersion")
   compile ("org.json:json:20190722")
 
-  compile ("joda-time:joda-time:2.10.5")
+  compile ("joda-time:joda-time:2.10.6")
 
   compile ("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticVersion")
   compile ("org.elasticsearch.client:elasticsearch-rest-client-sniffer:$elasticVersion")
@@ -105,7 +110,7 @@ dependencies {
 
   testCompile ('junit:junit:4.13')
   testCompile ("com.adaptris:interlok-stubs:$interlokCoreVersion") { changing= true}
-  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.10.2")
+  testCompile ("com.fasterxml.jackson.core:jackson-databind:2.10.3")
   testCompile ("org.apache.logging.log4j:log4j-core:$log4j2Version")
   testCompile ("org.apache.logging.log4j:log4j-1.2-api:$log4j2Version")
   testCompile ("org.apache.logging.log4j:log4j-api:$log4j2Version")
@@ -227,25 +232,26 @@ publishing {
   }
 }
 
-spotbugs {
+spotbugsMain {
+  effort = "max"
+  reportLevel = "high"
   // showProgress = "true"
   effort = "max"
   // Ignore failures?
   // ignoreFailures = false
-
-  // We only care about "high priority" issues...
-  reportLevel = "high"
+  reports {
+    xml {
+      enabled = false
+    }
+    html {
+      enabled = true
+    }
+  }
 }
 
 // disable spotbugsTests which checks our test code..
 spotbugsTest.enabled = false
 
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
-  reports {
-    xml.enabled = false
-    html.enabled = true
-  }
-}
 
 check.dependsOn jacocoTestReport
 javadoc.dependsOn offlinePackageList
